@@ -8,24 +8,25 @@ import rename from "gulp-rename";
 import livereload from "gulp-livereload";
 import autoprefixer from "gulp-autoprefixer";
 import imagemin from "gulp-imagemin";
+import htmlmin from "gulp-htmlmin";
 
 //define paths
 const paths = {
   style: {
     src: "src/styles/style.scss",
-    dest: "dest/styles/",
+    dest: "dist/styles/",
   },
   script: {
     src: "src/scripts/index.js",
-    dest: "dest/scripts/",
+    dest: "dist/scripts/",
   },
   html: {
     src: "src/*.html",
-    dest: "dest",
+    dest: "dist",
   },
   imgs: {
     src: "src/imgs/*.{jpg,jpeg,png,svg}",
-    dest: "dest/imgs",
+    dest: "dist/imgs",
   },
 };
 
@@ -76,6 +77,7 @@ const html = () => {
         extname: ".html",
       })
     )
+    .pipe(htmlmin({ collapseWhitespace: true }))
     .pipe(gulp.dest(paths.html.dest))
     .pipe(livereload());
 };
@@ -90,6 +92,7 @@ const imgs = () => {
 
 const watch = () => {
   require("./server");
+  //to reload automatically, you have to add a script tag in your html file with src of  'http://localhost:35729/livereload.js'
   livereload.listen();
   gulp.watch(paths.script.src, script);
   gulp.watch("src/styles/**/*.scss", style);
